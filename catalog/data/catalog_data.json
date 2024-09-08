@@ -1,0 +1,99 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 5,
+    "fields": {
+      "category_name": "Рассылки",
+      "info_category": "Сервис рассылок позволяет автоматизировать процесс оповещения персонала распоряжениями и изменениями в работе."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 6,
+    "fields": {
+      "category_name": "Боты",
+      "info_category": "Телеграм боты позволяют автоматизировать бизнес процессы связанные с простейшей работой с клиентом. Они могут отвечать на стандартные и часто встречающиеся вопросы поступающие от клиентов. Также способны предоставить какую-либо полезную информацию."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 7,
+    "fields": {
+      "category_name": "Утилиты",
+      "info_category": "Различного рода простейшие и не очень программные продукты."
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 8,
+    "fields": {
+      "category_name": "Веб-приложения",
+      "info_category": "Различного рода веб-серсвисы облегчающие работу компании."
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "product_name": "Простой бот",
+      "info_product": "Простой бот способен отвечать на простейшие вопросы клиента.",
+      "image_product": "products/avatar.jpg",
+      "category_product": 6,
+      "price": 80,
+      "created_at": "2024-09-08T09:27:52.733Z",
+      "updated_at": "2024-09-08T09:27:52.733Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+      "product_name": "Средний бот",
+      "info_product": "Средний бот обладает функционалом простого бота плюс способеносуществлять рассылку выгодных предложений, обработать заказ.",
+      "image_product": "",
+      "category_product": 6,
+      "price": 100,
+      "created_at": "2024-09-08T09:27:52.733Z",
+      "updated_at": "2024-09-08T09:27:52.733Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+      "product_name": "Рассылки по почте",
+      "info_product": "Простой способ оповещения клиентов о выгодных предложениях компании.",
+      "image_product": "",
+      "category_product": 5,
+      "price": 140,
+      "created_at": "2024-09-08T09:27:52.733Z",
+      "updated_at": "2024-09-08T09:27:52.733Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+      "product_name": "Базовая утилита",
+      "info_product": "Простой программный продукт выполняющий определенную задачу.",
+      "image_product": "",
+      "category_product": 7,
+      "price": 1500,
+      "created_at": "2024-09-08T09:27:52.733Z",
+      "updated_at": "2024-09-08T09:27:52.733Z"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "product_name": "Базовый веб-сервис",
+      "info_product": "Веб-приложение, которое обеспечивает на просторах сети место маркетплайса компании.",
+      "image_product": "",
+      "category_product": 8,
+      "price": 10000,
+      "created_at": "2024-09-08T09:27:52.733Z",
+      "updated_at": "2024-09-08T09:27:52.733Z"
+    }
+  }
+]
