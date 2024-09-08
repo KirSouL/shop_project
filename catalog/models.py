@@ -1,7 +1,6 @@
 from django.db import models
 
-
-NULLABLE = {'blank': True, 'null': True,}
+NULLABLE = {'blank': True, 'null': True, }
 
 
 class Category(models.Model):
@@ -11,11 +10,12 @@ class Category(models.Model):
     info_category = models.TextField(verbose_name='описание категории')
 
     def __str__(self):
-        return f"{self.category_name} {self.info_category}"
+        return f"{self.category_name}"
 
     class Meta:
-        verbose_name = 'категория'
-        verbose_name_plural = 'категории'
+        verbose_name = 'категорию'
+        verbose_name_plural = 'категорий'
+        ordering = ('category_name',)
 
 
 class Product(models.Model):
@@ -24,7 +24,8 @@ class Product(models.Model):
     product_name = models.CharField(max_length=50, verbose_name='наименование продукта')
     info_product = models.TextField(verbose_name='описание продукта', **NULLABLE)
     image_product = models.ImageField(upload_to='products/', verbose_name='изображение продукта', **NULLABLE)
-    category_product = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category_product = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категори продукта',
+                                         **NULLABLE, related_name='продукты')
     price = models.IntegerField(verbose_name='цена продукта', **NULLABLE)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='дата создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='дата последнего изменения')
@@ -35,4 +36,5 @@ class Product(models.Model):
 
     class Meta:
         verbose_name = 'продукт'
-        verbose_name_plural = 'продукты'
+        verbose_name_plural = 'продуктов'
+        ordering = ('category_product', 'product_name',)
