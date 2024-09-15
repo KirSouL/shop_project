@@ -1,0 +1,17 @@
+{% extends 'catalog/base.html' %}
+{% block content %}
+{% for object in object_list %}
+<div class="col-3">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <button type="button" class="btn btn-lg btn-block btn-outline-primary">{{ object.category_name }}</button>
+        </div>
+        <div class="card-body">
+            <ul class="list-unstyled mt-3 mb-3 text-center">
+                <li>{{ object.info_category|slice:60 }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
