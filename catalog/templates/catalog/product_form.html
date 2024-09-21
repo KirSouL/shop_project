@@ -3,15 +3,15 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
-                    <% if object %>
-                        Cоздать
-                    <% else %>
-                        Сохранить
-                    <% endif %>
+                    {% if object %}
+                        Cохранить
+                    {% else %}
+                        Создать
+                    {% endif %}
                 </button>
             </form>
         </div>
