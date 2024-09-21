@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView
-from catalog.models import Product, Category
-
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView, TemplateView
+from catalog.models import Product, Category, Blog
+from pytils.translit import slugify
 
 class ProductCreateView(CreateView):
     model = Product
@@ -18,7 +18,6 @@ class ProductUpdateView(UpdateView):
 
 class ProductListView(ListView):
     model = Product
-    # fields = ('product_name', 'info_product', 'image_product', 'price',)
 
 
 class ProductDetailView(DetailView):
@@ -30,21 +29,57 @@ class ProductDeleteView(DeleteView):
     success_url = reverse_lazy('catalog:product_list')
 
 
-# class ProductCreateView(CreateView):
-#     model = Product
-#     fields = ('product_name', 'info_product', 'image_product', 'price',)
-#     success_url = reverse_lazy('catalog:product_list')
+class BlogCreateView(CreateView):
+    model = Blog
+    fields = ('title', 'information', 'preview', 'is_published',)
+    success_url = reverse_lazy('catalog:blog_list')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_blog = form.save()
+            new_blog.slug = slugify(new_blog.title)
+            new_blog.save()
+            return super().form_valid(form)
 
 
-# def home(request):
-#     product_list = Product.objects.all()
-#     context = {
-#         'object_list': product_list,
-#         'title': 'Shop Market',
-#         'title_info': 'Shop Market - это магазин сервисов. Пользуйтесь и получайте наслаждение.'
-#
-#     }
-#     return render(request, 'catalog/product_list.html', context)
+class BlogUpdateView(UpdateView):
+    model = Blog
+    fields = ('title', 'information', 'preview', 'is_published',)
+    # success_url = reverse_lazy('catalog:blog_list')
+
+    def form_valid(self, form):
+        if form.is_valid():
+            new_blog = form.save()
+            new_blog.slug = slugify(new_blog.title)
+            new_blog.save()
+            return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('catalog:view', args=[self.kwargs.get('pk')])
+
+class BlogListView(ListView):
+    model = Blog
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset(*args, **kwargs)
+        queryset = queryset.filter(is_published=True)
+        return queryset
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        self.object.count_views += 1
+        self.object.save()
+        return self.object
+
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    success_url = reverse_lazy('catalog:blog_list')
+
 
 def category(request):
     category_list = Category.objects.all()
@@ -55,26 +90,5 @@ def category(request):
     return render(request, 'catalog/category.html', context)
 
 
-# def product(request, pk):
-#     product_list = Product.objects.get(pk=pk)
-#     context = {
-#         'object_list': product_list,
-#         'title': 'Продукт',
-#     }
-#     return render(request, 'catalog/product_detail.html', context)
-#
-#
-def contacts(request):
-    context = {
-        'title': 'Контакты',
-    }
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
-        print(f"Имя пользователя: {name},\n"
-              f"Почта пользователя: {email},\n"
-              f"Телефон пользователя: {phone},\n"
-              f"Сообщение от пользователя: {message}")
-    return render(request, 'catalog/contacts.html', context)
+class ContactsView(TemplateView):
+    template_name = "catalog/contacts.html"
