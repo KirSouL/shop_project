@@ -1,9 +1,21 @@
 from django import forms
-from catalog.models import Product
+from django.forms import BooleanField
+
+from catalog.models import Product, Version, Blog
 STOP_LIST = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
 
-class ProductForm(forms.ModelForm):
+class MixinStyleForm:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, BooleanField):
+                field.widget.attrs["class"] = "form-check-input"
+            else:
+                field.widget.attrs["class"] = "form-control"
+
+
+class ProductForm(MixinStyleForm, forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
@@ -24,3 +36,15 @@ class ProductForm(forms.ModelForm):
                 raise forms.ValidationError('Ошибка, в описании продукта содержатся запрещенные слова')
 
         return cleaned_data
+
+
+class VersionForm(MixinStyleForm, forms.ModelForm):
+    class Meta:
+        model = Version
+        fields = '__all__'
+
+
+class BlogForm(forms.ModelForm):
+    class Meta:
+        model = Blog
+        fields = '__all__'
