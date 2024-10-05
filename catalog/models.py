@@ -37,7 +37,7 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'продукт'
         verbose_name_plural = 'продуктов'
-        ordering = ('category_product', 'product_name',)
+        ordering = ('-category_product', '-product_name',)
 
 
 class Blog(models.Model):
@@ -57,3 +57,20 @@ class Blog(models.Model):
     class Meta:
         verbose_name = 'блог'
         verbose_name_plural = 'блогов'
+        ordering = ("-is_published", "-created_at")
+
+
+class Version(models.Model):
+    name_version = models.CharField(max_length=50, verbose_name='название версии')
+    number_version = models.IntegerField(verbose_name='номер версии')
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='продукт')
+    is_version = models.BooleanField(verbose_name='состояние версии')
+
+    def __str__(self):
+        return f"{self.product}, {self.number_version}, {self.name_version}"
+
+    class Meta:
+        verbose_name = 'версия'
+        verbose_name_plural = 'версии'
+        ordering = ("-is_version",)
