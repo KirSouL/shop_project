@@ -59,6 +59,15 @@ class ProductListView(ListView):
             product.current_version = current_version
         return context_data
 
+    def form_valid(self, form):
+        forms = self.get_context_data()['current_version']
+        self.object = form.save()
+        if forms.is_valid():
+            forms.instance = self.object
+            forms.save()
+
+        return super().form_valid(form)
+
 
 class ProductDetailView(DetailView):
     model = Product

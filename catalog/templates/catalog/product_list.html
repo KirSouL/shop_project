@@ -10,6 +10,9 @@
     <div class="card mb-4 box-shadow">
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">{{ object.product_name }}</h4>
+            {% for object in object.current_version%}
+                <p>Наименование версии: {{ object.name_version }} Номер версии: {{ object.number_version }}</p>
+            {% endfor %}
         </div>
         <div class="card-body">
             <h2 class="card-title pricing-card-title">{{ object.price }}</h2>
