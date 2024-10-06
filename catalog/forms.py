@@ -6,6 +6,7 @@ STOP_LIST = ['казино', 'криптовалюта', 'крипта', 'бир
 
 
 class MixinStyleForm:
+    """Класс примесь для стилизации форм продукта"""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -21,6 +22,7 @@ class ProductForm(MixinStyleForm, forms.ModelForm):
         fields = '__all__'
 
     def clean_product_name(self):
+        """Метод проверяющий ввод пользователя на запрещенные слова в наименовании продукта"""
         cleaned_data = self.cleaned_data.get('product_name')
 
         if cleaned_data.lower() in STOP_LIST:
@@ -29,6 +31,7 @@ class ProductForm(MixinStyleForm, forms.ModelForm):
         return cleaned_data
 
     def clean_info_product(self):
+        """Метод проверяющий ввод пользователя на запрещенные слова в содержании продукта"""
         cleaned_data = self.cleaned_data.get('info_product')
 
         for word in STOP_LIST:
@@ -42,6 +45,16 @@ class VersionForm(MixinStyleForm, forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
+
+    def clean(self):
+        """Метод для проверки существования только одной версии продукта"""
+        cleaned_data = super().clean()
+        current_version = cleaned_data.get("is_version")
+        product_version = self.instance.product
+        if current_version:
+            if Version.objects.filter(product=product_version, is_version=True):
+                raise forms.ValidationError("Для продукта может существовать только одна версия")
+        return cleaned_data
 
 
 class BlogForm(forms.ModelForm):
