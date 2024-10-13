@@ -1,4 +1,5 @@
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, UserChangeForm
+from django import forms
 
 from users.models import User
 
@@ -21,3 +22,14 @@ class UserPasswordResetForm(StyleFormMixin, PasswordResetForm):
     class Meta:
         model = User
         fields = ('email',)
+
+
+class UserProfileForm(StyleFormMixin, UserChangeForm):
+    """Форма для изменения информации о пользователе"""
+    class Meta:
+        model = User
+        fields = ("email", "first_name", "last_name", "phone", "avatar",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password"].widget = forms.HiddenInput()
