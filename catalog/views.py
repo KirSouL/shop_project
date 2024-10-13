@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -8,33 +9,19 @@ from catalog.models import Product, Category, Blog, Version
 from pytils.translit import slugify
 
 
-class ProductFormValidMixin:
-    def form_valid(self, form):
-        formset = self.get_context_data()['formset']
-        self.object = form.save()
-        if formset.is_valid():
-            formset.instance = self.object
-            formset.save()
-
-        return super().form_valid(form)
-
-
-class ProductCreateView(ProductFormValidMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("catalog:product_list")
 
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        VersionFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
-        if self.request.method == 'POST':
-            context_data['formset'] = VersionFormset(self.request.POST)
-        else:
-            context_data['formset'] = VersionFormset()
-        return context_data
+    def form_valid(self, form):
+        product = form.save()
+        product.owner = self.request.user
+        product.save()
+        return super().form_valid(form)
 
 
-class ProductUpdateView(ProductFormValidMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy("catalog:product_list")
@@ -47,6 +34,15 @@ class ProductUpdateView(ProductFormValidMixin, UpdateView):
         else:
             context_data['formset'] = VersionFormset(instance=self.object)
         return context_data
+
+    def form_valid(self, form):
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+
+        return super().form_valid(form)
 
 
 class ProductListView(ListView):
@@ -73,7 +69,7 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('catalog:product_list')
 

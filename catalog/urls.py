@@ -2,6 +2,7 @@ from django.urls import path
 from catalog.apps import CatalogConfig
 from catalog.views import ProductListView, ProductDetailView, ProductDeleteView, ProductCreateView, ProductUpdateView, \
     category, BlogListView, BlogCreateView, BlogUpdateView, BlogDetailView, BlogDeleteView, ContactsView
+
 app_name = CatalogConfig.name
 
 urlpatterns = [
