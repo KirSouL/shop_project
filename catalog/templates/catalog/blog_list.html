@@ -26,10 +26,12 @@
                        class="btn btn-lg btn-block btn-outline-primary">
                         Обновить
                     </a>
+                    {% if user.is_superuser or user.owner %}
                     <a href="{% url 'catalog:delete_blog' object.pk %}"
                        class="btn btn-lg btn-block btn-outline-primary">
                         Удалить
                     </a>
+                    {% endif %}
                 </p>
             </div>
         </div>

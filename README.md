@@ -39,3 +39,6 @@ python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude auth.user -
 python manage.py manage
 
 Для работы с админкой необходимо завеcти администратора. В терминале пропишите команду: python manage.py command_csu
+
+Файл groups_data.json представляет собой набор данных полученных с помощью фикстуры dumpdata.
+Для загрузки групп воспользуйтесь командой:  python manage.py loaddata groups_data.json

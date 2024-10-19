@@ -33,6 +33,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='дата последнего изменения', **NULLABLE)
 
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="пользователь", **NULLABLE)
+    is_published = models.BooleanField(default=False, verbose_name="статус публикации продукта")
 
     def __str__(self):
         return (f"{self.product_name} {self.info_product} {self.category_product}"
@@ -42,6 +43,14 @@ class Product(models.Model):
         verbose_name = 'продукт'
         verbose_name_plural = 'продуктов'
         ordering = ('-category_product', '-product_name',)
+        permissions = [
+            ('set_info_product',
+             'Can info product'),
+            ('set_category_product',
+             'Can info product'),
+            ('set_published_status',
+             'Can published product'),
+        ]
 
 
 class Blog(models.Model):
