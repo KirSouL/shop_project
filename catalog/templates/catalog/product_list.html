@@ -1,9 +1,11 @@
 {% extends 'catalog/base.html' %}
 {% block content %}
 <div class="col-12 mb-5">
+    {% if perms.catalog.add_product %}
     <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:create_product' %}">
         Добавить продукт
     </a>
+    {% endif %}
 </div>
 {% for object in object_list %}
 <div class="col-6" xmlns="http://www.w3.org/1999/html">
@@ -11,7 +13,7 @@
         <div class="card-header">
             <h4 class="my-0 font-weight-normal">{{ object.product_name }}</h4>
             {% for object in object.current_version%}
-                <p>Наименование версии: {{ object.name_version }} Номер версии: {{ object.number_version }}</p>
+            <p>Наименование версии: {{ object.name_version }} Номер версии: {{ object.number_version }}</p>
             {% endfor %}
         </div>
         <div class="card-body">
@@ -25,14 +27,18 @@
                        class="btn btn-lg btn-block btn-outline-primary">
                         Инфо
                     </a>
+                    {% if perms.catalog.set_info_product and perms.catalog.set_category_product and perms.catalog.set_published_status or user == object.owner %}
                     <a href="{% url 'catalog:update_product' object.pk %}"
                        class="btn btn-lg btn-block btn-outline-primary">
                         Обновить
                     </a>
+                    {% endif %}
+                    {% if user.is_superuser or user.owner %}
                     <a href="{% url 'catalog:delete' object.pk %}"
                        class="btn btn-lg btn-block btn-outline-primary">
                         Удалить
                     </a>
+                    {% endif %}
                     <a class="btn btn-lg btn-block btn-outline-primary">
                         Купить
                     </a>

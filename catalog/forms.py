@@ -19,7 +19,7 @@ class MixinStyleForm:
 class ProductForm(MixinStyleForm, forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ("created_at", "updated_at", "is_published")
 
     def clean_product_name(self):
         """Метод проверяющий ввод пользователя на запрещенные слова в наименовании продукта"""
@@ -39,6 +39,12 @@ class ProductForm(MixinStyleForm, forms.ModelForm):
                 raise forms.ValidationError('Ошибка, в описании продукта содержатся запрещенные слова')
 
         return cleaned_data
+
+
+class ProductModeratorForm(MixinStyleForm, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ("info_product", "category_product", "is_published")
 
 
 class VersionForm(MixinStyleForm, forms.ModelForm):
