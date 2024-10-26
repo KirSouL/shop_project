@@ -1,3 +1,5 @@
+import os
+
 from django.core.management import BaseCommand
 
 from users.models import User
@@ -14,5 +16,6 @@ class Command(BaseCommand):
             is_active=True,
             is_superuser=True
         )
-        user.password("qwe123qew456")
+        admin_password = os.getenv('admin_password')
+        user.password(admin_password)
         user.save()
