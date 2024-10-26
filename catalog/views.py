@@ -6,8 +6,10 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, UpdateView, TemplateView
 
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from catalog.models import Product, Category, Blog, Version
+from catalog.models import Product, Blog, Version
 from pytils.translit import slugify
+
+from catalog.services import get_categories, get_products
 
 
 class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
@@ -74,6 +76,9 @@ class ProductListView(ListView):
 
         return super().form_valid(form)
 
+    def get_queryset(self):
+        return get_products()
+
 
 class ProductDetailView(DetailView):
     model = Product
@@ -133,7 +138,7 @@ class BlogDeleteView(DeleteView):
 
 
 def category(request):
-    category_list = Category.objects.all()
+    category_list = get_categories()
     context = {
         'object_list': category_list,
         'title': 'Категории продуктов',
